@@ -1,0 +1,19 @@
+{
+  "name": "absences",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "lib/index.mjs",
+  "scripts": {
+    "start": "npx tsc && node ./lib/index.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "playwright": "^1.39.0"
+  }
+}
