@@ -11,9 +11,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsdom": "^21.1.4",
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "jsdom": "^22.1.0",
+    "node-fetch": "^3.3.2",
     "playwright": "^1.39.0"
   }
 }
