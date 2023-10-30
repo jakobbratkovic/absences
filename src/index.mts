@@ -2,6 +2,8 @@ import { chromium, LaunchOptions, Page } from 'playwright';
 import fetch from 'node-fetch';
 import config from './config.mjs';
 import { JSDOM } from 'jsdom';
+import {createHmac} from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const url = 'https://myeeb1.13stars.eu/absences';
 
@@ -236,6 +238,19 @@ function isItToday(infoString: string): boolean {
     return infoString.includes(dateString);
 }
 
+function isAlreadyPublished(user: string, absenceTable: TTable): boolean {
+    const hash = createHmac('sha256', JSON.stringify(absenceTable))
+               .digest('hex');
+    const path = `/tmp/${user}.hash`
+
+    try {
+        let storedHash = readFileSync(path, {encoding:'utf8'});
+        if(storedHash === hash) return true;
+    } catch {}
+    writeFileSync(path, hash, {encoding: 'utf8'})
+    return false;
+}
+
 (async () => {
     let page = await fetchAbsencePage();
     const dom = new JSDOM(page);
@@ -257,6 +272,9 @@ function isItToday(infoString: string): boolean {
             }
         });
         let absenceTable: TTable = buildAbsenceTable(tableRowArray);
-        postAbsenceTable(buildMentionBlock(user), absenceTable, buildMentionEntity(user), user.webhook);
+        if(!isAlreadyPublished(user.name, absenceTable)) {
+            console.log('Publishing new absence table');
+            postAbsenceTable(buildMentionBlock(user), absenceTable, buildMentionEntity(user), user.webhook);
+        }
     });
 })();

@@ -1,6 +1,6 @@
 FROM node
 WORKDIR /app
-RUN apt-get update && apt-get -y install cron
+RUN apt-get update && apt-get -y install cron vim
 COPY *.json /app/
 RUN ["npm", "install"]
 RUN ["npx", "playwright", "install-deps"]
