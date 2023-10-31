@@ -8,4 +8,5 @@ RUN ["npx", "playwright", "install"]
 COPY ["crontab", "/app/crontab"]
 RUN ["crontab", "/app/crontab"]
 COPY ["src", "/app/src"]
+RUN ["npx", "tsc"]
 CMD touch /var/log/cron.log && cron && tail -f /var/log/cron.log
