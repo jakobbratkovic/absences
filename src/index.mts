@@ -229,13 +229,20 @@ function extractMissingClassFromRow(row: Element, usersClasses: string[]): strin
     return missingClass;
 }
 
-function isItToday(infoString: string): boolean {
+function isValidDate(infoString: string): boolean {
     let today = new Date();
-    let date = today.getDate();
-    let month = today.getMonth() + 1;
-    let year = today.getFullYear();
-    let dateString = `${date}/${month}/${year}`
-    return infoString.includes(dateString);
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    let date: Date;
+    (today.getHours() < 16) ? date = today : date = tomorrow;
+    let dateString = date.toLocaleString("en-GB", {day: "2-digit", month: "2-digit", year: "numeric"});
+    console.log(`Running for info string ${infoString}`)
+    console.log(`Comparing with date ${dateString}`)
+    if(infoString.includes(dateString)) {
+        return true;
+    } else {
+        return false;
+    } return false;
 }
 
 function isAlreadyPublished(user: string, absenceTable: TTable): boolean {
@@ -255,8 +262,7 @@ function isAlreadyPublished(user: string, absenceTable: TTable): boolean {
     let page = await fetchAbsencePage();
     const dom = new JSDOM(page);
     let infoString: string | undefined = dom.window.document.querySelector('#info')?.innerHTML;
-    if(infoString && !isItToday(infoString)) {
-        console.log(infoString);
+    if(infoString && !isValidDate(infoString)) {
         console.log('Absence table has a wrong date, bailing out!');
         process.exit(0);
     }
