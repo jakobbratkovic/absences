@@ -1,2 +1,4 @@
+.DS_*
+config.mjs.orig
 lib
 node_modules

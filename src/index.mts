@@ -235,7 +235,7 @@ function isValidDate(infoString: string): boolean {
     tomorrow.setDate(tomorrow.getDate() + 1);
     let date: Date;
     (today.getHours() < 16) ? date = today : date = tomorrow;
-    let dateString = date.toLocaleString("en-GB", {day: "2-digit", month: "2-digit", year: "numeric"});
+    let dateString = date.toLocaleString("en-GB");
     console.log(`Running for info string ${infoString}`)
     console.log(`Comparing with date ${dateString}`)
     if(infoString.includes(dateString)) {
