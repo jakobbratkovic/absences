@@ -251,6 +251,7 @@ function isAlreadyPublished(user: string, absenceTable: TTable): boolean {
     const path = `/tmp/${user}.hash`
 
     try {
+        if(absenceTable.rows.length == 0) return true;
         let storedHash = readFileSync(path, {encoding:'utf8'});
         if(storedHash === hash) return true;
     } catch {}
