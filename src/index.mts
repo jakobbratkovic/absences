@@ -103,7 +103,7 @@ function rowToAbsence(period: string, missingClass: string): TRow {
 async function fetchAbsencePage(): Promise<string | undefined> {
     const browser = await chromium.launch(options);
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: 'networkidle' });
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
     let body = await page.content();
     await browser.close();
     return body;
@@ -251,7 +251,6 @@ function isAlreadyPublished(user: string, absenceTable: TTable): boolean {
     const path = `/tmp/${user}.hash`
 
     try {
-        if(absenceTable.rows.length == 0) return true;
         let storedHash = readFileSync(path, {encoding:'utf8'});
         if(storedHash === hash) return true;
     } catch {}
@@ -279,7 +278,7 @@ function isAlreadyPublished(user: string, absenceTable: TTable): boolean {
             }
         });
         let absenceTable: TTable = buildAbsenceTable(tableRowArray);
-        if(!isAlreadyPublished(user.name, absenceTable)) {
+        if((absenceTable.rows.length <= 1) && (!isAlreadyPublished(user.name, absenceTable))) {
             console.log('Publishing new absence table');
             postAbsenceTable(buildMentionBlock(user), absenceTable, buildMentionEntity(user), user.webhook);
         }
