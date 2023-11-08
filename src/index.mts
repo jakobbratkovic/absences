@@ -278,7 +278,7 @@ function isAlreadyPublished(user: string, absenceTable: TTable): boolean {
             }
         });
         let absenceTable: TTable = buildAbsenceTable(tableRowArray);
-        if((absenceTable.rows.length <= 1) && (!isAlreadyPublished(user.name, absenceTable))) {
+        if((absenceTable.rows.length > 1) && (!isAlreadyPublished(user.name, absenceTable))) {
             console.log('Publishing new absence table');
             postAbsenceTable(buildMentionBlock(user), absenceTable, buildMentionEntity(user), user.webhook);
         }
